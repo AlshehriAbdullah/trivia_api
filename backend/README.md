@@ -79,10 +79,11 @@ DELETE '/questions/<int:question_id>'
 
 
 ### GET '/categories'
-```
+
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
+- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs.
+```
 {'1' : "Science",
 '2' : "Art",
 '3' : "Geography",
@@ -92,10 +93,10 @@ DELETE '/questions/<int:question_id>'
 ```
 
 ### GET '/questions'
-```
+
 - Returns a list of question objects, success value, and total number of books 
 - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1.
-
+```
 {
   "categories": {
     "1": "Science", 
@@ -184,10 +185,11 @@ DELETE '/questions/<int:question_id>'
 ```
 
 ### GET '/categories/<int:category_id>/questions'
-```
+
 - Returns a list of question objects for a particular category id, success value, and total number of books 
 - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1.
 - curl http://127.0.0.1:5000/categories/6/questions
+```
 {
   "current_category": 6, 
   "questions": [
@@ -212,10 +214,10 @@ DELETE '/questions/<int:question_id>'
 ```
 
 ### POST '/questions'
-```
+
 - Creates a new questions using the submitted questions, answer, difficulty and category. Returns the id of the created questions, success value, total questions, and questions list based on current page number to update the frontend.
 - curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"questions":"Who was the first president to be inaugurated in Washington, D.C.?", "answer":"thomas jefferson","category":4,"difficulty":5}'
-
+```
 {
   "created": 31, 
   "questions": [
@@ -296,10 +298,11 @@ DELETE '/questions/<int:question_id>'
 ```
 
 ### POST '/questions/search'
-```
+
 - Returns a list of question objects for the entered search term, success value, and total number of questions returned.
 - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1.
 - curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"searchTerm":"what"}'
+```
 {
   "current_category": null, 
   "questions": [
@@ -366,10 +369,10 @@ DELETE '/questions/<int:question_id>'
 ```
 
 ### POST '/quizzes'
-```
 - A random question will be picked for you based on a category that been chosen
 - Returns a question object, success value, previous questions asked, and quiz category.
 - curl http://127.0.0.1:5000/quizzes -X POST -H "Content-Type: application/json" -d '{"quiz_category": {"id": "6", "type": "Sports"},"previous_questions": []}'
+```
 {
   "categ_id": 6, 
   "previous_questions": [], 
@@ -385,9 +388,11 @@ DELETE '/questions/<int:question_id>'
 ```
 
 ### DELETE '/questions/<int:question_id>'
-```
+
 - Deletes the question of the given ID if it exists. Returns the id of the deleted question, success value, total questions, and questions   list based on current page number to update the frontend.
 - curl -X DELETE http://127.0.0.1:5000/questions/17
+```
+
 {
   "deleted": 17, 
   "success": true

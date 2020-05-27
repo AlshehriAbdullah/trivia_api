@@ -66,11 +66,8 @@ One note before you delve into your tasks: for each endpoint you are expected to
 8. Create a POST endpoint to get questions to play the quiz. This endpoint should take category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions. 
 9. Create error handlers for all expected errors including 400, 404, 422 and 500. 
 
-REVIEW_COMMENT
-```
-This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
 
-Endpoints
+## Endpoints
 GET '/categories'
 GET '/questions'
 GET '/categories/<int:category_id>/questions'
@@ -81,7 +78,8 @@ DELETE '/questions/<int:question_id>'
 
 
 
-GET '/categories'
+### GET '/categories'
+```
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
 - Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
@@ -91,8 +89,10 @@ GET '/categories'
 '4' : "History",
 '5' : "Entertainment",
 '6' : "Sports"}
+```
 
-GET '/questions'
+### GET '/questions'
+```
 - Returns a list of question objects, success value, and total number of books 
 - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1.
 
@@ -181,8 +181,10 @@ GET '/questions'
   "success": true, 
   "total_questions": 20
 }
+```
 
-GET '/categories/<int:category_id>/questions'
+### GET '/categories/<int:category_id>/questions'
+```
 - Returns a list of question objects for a particular category id, success value, and total number of books 
 - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1.
 - curl http://127.0.0.1:5000/categories/6/questions
@@ -207,9 +209,10 @@ GET '/categories/<int:category_id>/questions'
   "success": true, 
   "total_questions": 2
 }
+```
 
-
-POST '/questions'
+### POST '/questions'
+```
 - Creates a new questions using the submitted questions, answer, difficulty and category. Returns the id of the created questions, success value, total questions, and questions list based on current page number to update the frontend.
 - curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"questions":"Who was the first president to be inaugurated in Washington, D.C.?", "answer":"thomas jefferson","category":4,"difficulty":5}'
 
@@ -290,8 +293,10 @@ POST '/questions'
   "success": true, 
   "total_questions": 21
 }
+```
 
-POST '/questions/search'
+### POST '/questions/search'
+```
 - Returns a list of question objects for the entered search term, success value, and total number of questions returned.
 - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1.
 - curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"searchTerm":"what"}'
@@ -358,11 +363,10 @@ POST '/questions/search'
   "success": true, 
   "total_questions": 8
 }
+```
 
-
-
-POST '/quizzes'
-
+### POST '/quizzes'
+```
 - A random question will be picked for you based on a category that been chosen
 - Returns a question object, success value, previous questions asked, and quiz category.
 - curl http://127.0.0.1:5000/quizzes -X POST -H "Content-Type: application/json" -d '{"quiz_category": {"id": "6", "type": "Sports"},"previous_questions": []}'
@@ -378,16 +382,17 @@ POST '/quizzes'
   }, 
   "success": true
 }
+```
 
-
-DELETE '/questions/<int:question_id>'
+### DELETE '/questions/<int:question_id>'
+```
 - Deletes the question of the given ID if it exists. Returns the id of the deleted question, success value, total questions, and questions   list based on current page number to update the frontend.
 - curl -X DELETE http://127.0.0.1:5000/questions/17
 {
   "deleted": 17, 
   "success": true
 }
-
+```
 
 ## Testing
 To run the tests, run

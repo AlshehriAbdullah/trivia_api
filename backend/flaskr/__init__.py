@@ -106,7 +106,7 @@ def create_app(test_config=None):
             })
     
     except:
-        abort(404)
+        abort(422)
 
   '''
   @TODO: 
@@ -210,34 +210,33 @@ def create_app(test_config=None):
   '''
   @app.route('/quizzes', methods=['POST'])
   def get_quiz_questions():
-    body = request.get_json()
-    previous_questions = body.get('previous_questions', None)
-    quiz_category = body.get('quiz_category', None)
-    categ_id = int(quiz_category['id'])
+      body = request.get_json()
+      previous_questions = body.get('previous_questions', None)
+      quiz_category = body.get('quiz_category', None)
+      categ_id = int(quiz_category['id'])
+      
+      try:
 
+          if categ_id == 0:
+              questions = Question.query.filter(not_(Question.id.in_(previous_questions))).all()
+          else:
+              questions = Question.query.filter( Question.category == categ_id, not_(Question.id.in_(previous_questions))).all()
 
-    try:
-      if categ_id == 0:
-        questions = Question.query.filter(not_(Question.id.in_(previous_questions))).all()
-      else:
-        questions = Question.query.filter( Question.category == categ_id, not_(Question.id.in_(previous_questions))).all()
-
-      if questions:
-        random_question = random.choice(questions)
-        random_question_format = random_question.format()
-      else:
-        question = False
+          if questions:
+              random_question = random.choice(questions)
+              random_question_format = random_question.format()
+          else:
+              question = False
+  
+          return jsonify({
+              'success': True,
+               'question':random_question_format,
+               'previous_questions':previous_questions,
+               'categ_id':categ_id
+          })
             
-            
-      return jsonify({
-        'success': True,
-        'question': random_question_format,
-        'previous_questions': previous_questions,
-        'categ_id': categ_id
-            })
-    
-    except:
-      abort(404)
+      except:
+          abort(404)
 
   '''
   @TODO: 

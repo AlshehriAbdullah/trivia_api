@@ -112,6 +112,22 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['current_category'])
 
 
+    def test_405_questions_cannot_create(self):
+        response = self.client().post('/questions/17', json=self.new_question)
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'method not allowed')
+
+
+    def test_error_422(self):
+        response = self.client().delete('/questions/800')
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unprocessable')
+
+
     def test_quiz(self):
         response = self.client().post('/quizzes', json={'quiz_category': {'id': 3, 'type': 'Geography'}, 'previous_questions': [20]})
         data = json.loads(response.data)

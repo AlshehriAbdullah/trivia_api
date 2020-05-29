@@ -25,7 +25,7 @@ class TriviaTestCase(unittest.TestCase):
             # create all tables
             self.db.create_all()
 
-        self.new_question = {
+        self.question = {
             'question': 'What movie earned Tom Hanks his third straight Oscar nomination, in 1996?',
             'answer': 'Apollo 13',
             'difficulty': 4,
@@ -37,10 +37,7 @@ class TriviaTestCase(unittest.TestCase):
         """Executed after reach test"""
         pass
 
-    """
-    TODO
-    Write at least one test for each test for successful operation and for expected errors.
-    """
+
     def test_categories(self):
         response = self.client().get('/categories')
         data = json.loads(response.data)
@@ -58,24 +55,8 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['total_questions'])
 
 
-    def test_404_questions(self):
-        response = self.client().get('/questions?page=100000')
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], 'Not found')
-
-
-    def test_delete(self):
-        response = self.client().delete('/questions/10')
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted'], 10)
-
-
     def test_create(self):
-        response = self.client().post('/questions', json=self.new_question)
+        response = self.client().post('/questions', json=self.question)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -112,8 +93,34 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['current_category'])
 
 
+    def test_quiz(self):
+        response = self.client().post('/quizzes', json={'quiz_category': {'id': 3, 'type': 'Geography'}, 'previous_questions': [5]})
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(len(data['question']))
+        self.assertTrue(len(data['previous_questions']))
+        self.assertEqual(data['categ_id'], 3)
+
+
+    def test_delete(self):
+        response = self.client().delete('/questions/10')
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['deleted'], 10)
+
+
+    def test_404_questions(self):
+        response = self.client().get('/questions?page=100000')
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'page could not found')
+
+
     def test_405_questions_cannot_create(self):
-        response = self.client().post('/questions/17', json=self.new_question)
+        response = self.client().post('/questions/17', json=self.question)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 405)
         self.assertEqual(data['success'], False)
@@ -125,17 +132,7 @@ class TriviaTestCase(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 422)
         self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], 'unprocessable')
-
-
-    def test_quiz(self):
-        response = self.client().post('/quizzes', json={'quiz_category': {'id': 3, 'type': 'Geography'}, 'previous_questions': [20]})
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data['success'], True)
-        self.assertTrue(len(data['question']))
-        self.assertTrue(len(data['previous_questions']))
-        self.assertEqual(data['categ_id'], 3)
+        self.assertEqual(data['message'], 'unable to be processed')
 
 
 # Make the tests conveniently executable

@@ -35,16 +35,8 @@ def create_app(test_config=None):
 
   @app.route('/categories', methods=['GET'])
   def get_categories():
-    # Yasiri
-    # categories = Category.query.all()
-    # categ_format = {category.id: category.type for category in categories}
-    # if not categories:
-    #   abort(404)
 
-    # return jsonify({
-    #         'success':True,
-    #         'categories': categ_format
-    #     })
+
       categories = Category.query.order_by(Category.type).all()
       categ = {}
 
@@ -60,35 +52,8 @@ def create_app(test_config=None):
         })
 
 
-
   @app.route('/questions', methods=['GET'])
   def get_questions():
-    # questions = Question.query.all()
-    # current_qts = paginate_questions(request, questions)
-    # categories = Category.query.all()
-    # categ_format ={category.id: category.type for category in categories}
-    # current_category = []
-    # for categ in current_qts:
-    #   current_category.append(
-    #     db.session.query(Category.type).filter(
-    #       Category.id == categ['category']
-    #     ).all()
-    #   )
-    # if not current_qts:
-    #   abort(404)
-
-    # return jsonify({
-    #         'success':True,
-    #         'questions': current_qts,
-    #         'categories': categ_format,
-    #         'current_category': current_category,
-    #         'total_questions': len(Question.query.all())
-    # })
-
-
-    # dnbit
-
-
     questions = Question.query.all()
     current_qts = paginate_questions(request, questions)
 
@@ -110,6 +75,7 @@ def create_app(test_config=None):
     if not current_qts:
       abort(404)
 
+
     return jsonify({
             'success':True,
             'questions': current_qts,
@@ -119,18 +85,12 @@ def create_app(test_config=None):
     })
 
 
-
-
-
-
-
-
   @app.route('/questions/<int:question_id>', methods=['DELETE'])
   def Delete_Qts(question_id):
     try:
       questions = Question.query.get(question_id)
 
-      # if questions is None:
+
       if not questions:
         abort(404)
 
@@ -146,16 +106,6 @@ def create_app(test_config=None):
 
     except:
         abort(422)
-
-    
-
-
-
-
-
-
-
-
 
 
   @app.route('/questions', methods=['POST'])
@@ -203,12 +153,15 @@ def create_app(test_config=None):
 
   @app.route('/questions/search', methods=['POST'])
   def search_questions():
+
     try:
       body = request.get_json()
       search = body.get('searchTerm', None)
+
       questions = Question.query.order_by(Question.id).filter(Question.question.ilike('%'+search+'%')).all()
       current_qts = paginate_questions(request, questions)
       total_qts = len(questions)
+
       current_category = []
       for categ in current_qts:
         current_category.append(
@@ -217,7 +170,7 @@ def create_app(test_config=None):
           ).all()
         )
         
-        
+
       return jsonify({
                 'success': True,
                 'questions': current_qts,
@@ -230,12 +183,14 @@ def create_app(test_config=None):
 
   @app.route('/categories/<int:category_id>/questions', methods=['GET'])
   def quest_catgo(category_id):
+
     questions = Question.query.order_by(Question.id).filter(Question.category == category_id).all()
     current_qts = paginate_questions(request, questions)
     total_qts= len(questions)
-    # if len(current_qts) == 0:
+
     if not current_qts:
       abort(404)
+
     return jsonify({
       'success':True,
       'questions': current_qts,
